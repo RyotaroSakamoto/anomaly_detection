@@ -58,33 +58,23 @@ def eval_model(args):
     print("* evaluation mode started.")
 
     # 評価用データの読み込み
-    data_path = os.path.abspath(args.data)
-    df = pd.read_csv(data_path)
+    # data_path = os.path.abspath(args.data)
+    # df = pd.read_csv(data_path)
 
     # ここを実装する
-    print(f"* evaluation data loaded from {data_path}")
+    # print(f"* evaluation data loaded from {data_path}")
 
     # 学習済みモデルの読み込み
-    model_path = os.path.abspath(args.model)
-    with open(model_path,"rb") as f:
-        clf = pickle.load(f)
     # ここを実装する
-    print(f"* trained model loaded from {model_path}")
+    # print(f"* trained model loaded from {model_path}")
 
     # 評価の実行
-    df["class"] = clf.predict(df)
     # ここを実装する
-    print("* evaluation done.")
+    # print("* evaluation done.")
 
     # 評価結果の保存
-    out_path = _create_folder(args.out)
-    png_path = os.path.join(out_path,"histogram.png")
-    ax = sns.displot(clf.decision_scores_, kde=True)
-    plt.vlines(clf.threshold_, ymin=0, ymax=90, colors="red")
-    plt.savefig(png_path)
     # ここを実装する
-    print(f"* result save to {out_path}")
-
+    # print(f"* result save to {out_path}")
     return
 
 
@@ -95,36 +85,29 @@ def infer_model(args):
     data_path = os.path.abspath(args.data)
 
     # ここを実装する
-    df = pd.read_csv(data_path)
     print(f"* inference data loaded from {data_path}")
-
+    df = pd.read_csv(args.data)
 
     # 学習済みモデルの読み込み
-    model_path = os.path.abspath(args.model)
-
     # ここを実装する
+    model_path = os.path.abspath(args.model)
     with open(model_path, "rb") as f:
         clf = pickle.load(f)
     print(f"* trained model loaded from {model_path}")
 
     # 推論の実行
-
     # ここを実装する
-
-    out_path = _create_folder(args.out)
-    result_path = os.path.join(out_path,"result.csv")
-    result = pd.Series(clf.predict(df), index=df.index, name="class")
-    result.to_csv(result_path,index=None)
-    
-
+    result = clf.predict(df)
     print("* inference done.")
 
     # 推論結果の保存
-    out_path = _create_folder(args.out)
-
     # ここを実装する
+    out_path = os.path.abspath(args.out)
+    df_result = pd.DataFrame({
+        "class":result
+    })
+    df_result.to_csv(out_path)
     print(f"* result save to {out_path}")
-
     return
 
 if __name__ == "__main__":
